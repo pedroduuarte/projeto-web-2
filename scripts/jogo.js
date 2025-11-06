@@ -53,7 +53,7 @@ function criarLetras() {
     const letrasContainer = document.getElementById("letras-container");
     letrasContainer.innerHTML = "";
 
-    const alfabeto = "abcdefghijklmnopqrstuvwxyz".split("");
+    const alfabeto = "abcdefghijklmnopqrstuvwxyzçáéíóúãõâêô".split("");
     alfabeto.forEach(letra => {
         const botaoLetra = document.createElement("button");
         botaoLetra.innerText = letra;
