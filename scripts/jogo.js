@@ -26,14 +26,15 @@ const palavras = [
     { palavra: "zebra", imagem: "../assets/zebra.jpg" },
 ]
 
+
 let palavraAtual = {};
 let letrasEscolhidas = [];
 let palavraParcial = [];
-let indiceFaltando = 0;
+let indicesFaltando = [];
 const mensagem = document.getElementById("exibicao-resultado");
 
 function iniciar() {
-    // começa selecionando uma palavra aleatória
+    // seleciona uma palavra aleatória
     const palavraSorteada = palavras[Math.floor(Math.random() * palavras.length)];
     palavraAtual = palavraSorteada;
 
@@ -49,7 +50,6 @@ function iniciar() {
 }
 
 function criarLetras() {
-    // cria botões para cada letra do alfabeto
     const letrasContainer = document.getElementById("letras-container");
     letrasContainer.innerHTML = "";
 
@@ -63,47 +63,69 @@ function criarLetras() {
 }
 
 function criarPalavraIncompleta() {
-    // cria a palavra com uma letra faltando
     const palavra = palavraAtual.palavra;
     const letras = palavra.split("");
-    indiceFaltando = Math.floor(Math.random() * letras.length);
 
-    // cria a representação parcial da palavra
-    palavraParcial = letras.map((letra, index) => index === indiceFaltando ? "_" : letra);
-    // atualiza o display da palavra
+    // Define quantas letras esconder com base no tamanho da palavra
+    let qtdOcultas = 2;
+    if (letras.length > 6 && letras.length <= 9) qtdOcultas = 3;
+    else if (letras.length > 9) qtdOcultas = 4;
+
+    indicesFaltando = [];
+
+    while (indicesFaltando.length < qtdOcultas) {
+        const indice = Math.floor(Math.random() * letras.length);
+        if (!indicesFaltando.includes(indice)) {
+            indicesFaltando.push(indice);
+        }
+    }
+
+    palavraParcial = letras.map((letra, i) =>
+        indicesFaltando.includes(i) ? "_" : letra
+    );
+
     document.getElementById("palavra-container").innerHTML = palavraParcial.join(" ");
 }
 
 function verificarLetra(letra) {
-    // verifica se a letra escolhida está correta
-    const letraCorreta = palavraAtual.palavra[indiceFaltando];
+    let acertou = false;
     mensagem.classList.remove("correta", "incorreta");
 
-    // verifica se a letra escolhida está correta
-    if (letra === letraCorreta) {
-        palavraParcial[indiceFaltando] = letra;
-        atualizarPalavra();
+    indicesFaltando.forEach((i) => {
+        if (palavraAtual.palavra[i] === letra) {
+            palavraParcial[i] = letra;
+            acertou = true;
+        }
+    });
+
+    atualizarPalavra();
+
+    if (acertou) {
         mensagem.textContent = "✅ Letra correta!";
         mensagem.classList.add("correta");
-        // reinicia o jogo após 1.5 segundos
-        setTimeout(reiniciarJogo, 1500);
+
+        // Remove índices já preenchidos
+        indicesFaltando = indicesFaltando.filter(i => palavraParcial[i] === "_");
+
+        // Se completou a palavra
+        if (!palavraParcial.includes("_")) {
+            mensagem.textContent = "🎉 Parabéns! Você completou a palavra!";
+            setTimeout(reiniciarJogo, 1500);
+        }
     } else {
-        // letra incorreta
         mensagem.textContent = "❌ Letra incorreta!";
         mensagem.classList.add("incorreta");
     }
 }
 
 function atualizarPalavra() {
-    // atualiza o display da palavra
     document.getElementById("palavra-container").textContent = palavraParcial.join(" ");
 }
 
 function reiniciarJogo() {
-    // reseta variáveis e inicia um novo jogo
     palavraAtual = {};
     palavraParcial = [];
-    indiceFaltando = 0;
+    indicesFaltando = [];
     letrasEscolhidas = [];
     iniciar();
 }
