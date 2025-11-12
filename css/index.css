@@ -10,6 +10,41 @@
     height: 100vh;
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+}
+
+#main-container img,
+#main-container h1,
+#main-container p,
+#main-container button {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+#main-container img { animation-delay: 0.2s; }
+#main-container h1 { animation-delay: 0.4s; }
+#main-container p { animation-delay: 0.6s; }
+#main-container button { animation-delay: 0.8s; }
+
 #main-container img {
     width: 200px;
     height: auto;
@@ -42,9 +77,14 @@
     border-radius: 30px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #main-container button:hover {
     background-color: #7e4a9e;
+    transform: scale(1.05);
+}
+
+#main-container.fade-out {
+    animation: fadeOutDown 0.6s ease forwards;
 }
