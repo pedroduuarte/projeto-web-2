@@ -92,8 +92,12 @@ function criarPalavraIncompleta() {
 
     // define quantas letras esconder com base no tamanho da palavra
     let qtdOcultas = 2;
-    if (letras.length > 6 && letras.length <= 9) qtdOcultas = 3;
-    else if (letras.length > 9) qtdOcultas = 4;
+    if (letras.length > 6 && letras.length <= 9) {
+        qtdOcultas = 3;
+    } 
+    else if (letras.length > 9) {
+        qtdOcultas = 4;
+    } 
 
     indicesFaltando = [];
 
@@ -124,7 +128,7 @@ function verificarLetra(letra) {
 
         // compara ignorando acentos
         if (removerAcentos(letraPalavra).toUpperCase() === letra.toUpperCase()) {
-            palavraParcial[i] = letraPalavra; // mantém o acento original na exibição
+            palavraParcial[i] = letraPalavra; 
             acertou = true;
         }
     });
@@ -162,3 +166,14 @@ function reiniciarJogo() {
 }
 
 window.onload = iniciar;
+document.getElementById("btn-voltar").onclick = () => {
+    window.location.href = "../index.html";
+}
+
+document.getElementById("btn-proxima").onclick = () => {
+    palavraAtual = {};
+    palavraParcial = [];
+    indicesFaltando = [];
+    letrasEscolhidas = [];
+    iniciar();
+}
